@@ -1,0 +1,8 @@
+TCP 127.0.0.1:12345 | UDP 239.0.0.1:5555 | interface 127.0.0.1 | TTL 0
+Server listening on port 12345 ...
+Bruno iniciou a escuta
+Alice iniciou a escuta
+Alice chamou sendMessage: Ola, Bruno! Ensaio ae01892385be
+Alice recebeu em MessageListener: Alice -> Ola, Bruno! Ensaio ae01892385be
+Bruno recebeu em MessageListener: Alice -> Ola, Bruno! Ensaio ae01892385be
+SUCESSO: remetente e texto conferidos nos dois processos clientes.

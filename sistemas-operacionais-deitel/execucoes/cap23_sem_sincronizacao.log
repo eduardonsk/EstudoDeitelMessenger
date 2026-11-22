@@ -1,0 +1,28 @@
+Action		Value	Sum of Produced	Sum of Consumed
+------		-----	---------------	---------------
+
+Producer writes	 1	 1
+Producer writes	 2	 3
+Consumer reads	 2			 2
+Consumer reads	 2			 4
+Consumer reads	 2			 6
+Consumer reads	 2			 8
+Producer writes	 3	 6
+Consumer reads	 3			11
+Producer writes	 4	10
+Consumer reads	 4			15
+Consumer reads	 4			19
+Consumer reads	 4			23
+Producer writes	 5	15
+Producer writes	 6	21
+Producer writes	 7	28
+Producer writes	 8	36
+Consumer reads	 8			31
+Consumer reads	 8			39
+
+Consumer read values totaling 39
+Terminating Consumer
+Producer writes	 9	45
+Producer writes	10	55
+Producer done producing
+Terminating Producer
