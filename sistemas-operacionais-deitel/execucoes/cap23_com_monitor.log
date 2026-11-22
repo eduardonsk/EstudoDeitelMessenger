@@ -1,0 +1,75 @@
+Operation                               Buffer		Occupied
+---------                               ------		--------
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           -1		false
+
+Producer writes 1                       1		true
+
+Consumer reads 1                        1		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           1		false
+
+Producer writes 2                       2		true
+
+Consumer reads 2                        2		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           2		false
+
+Producer writes 3                       3		true
+
+Consumer reads 3                        3		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           3		false
+
+Producer writes 4                       4		true
+
+Consumer reads 4                        4		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           4		false
+
+Producer writes 5                       5		true
+
+Consumer reads 5                        5		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           5		false
+
+Producer writes 6                       6		true
+
+Consumer reads 6                        6		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           6		false
+
+Producer writes 7                       7		true
+
+Consumer reads 7                        7		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           7		false
+
+Producer writes 8                       8		true
+
+Consumer reads 8                        8		false
+
+Producer writes 9                       9		true
+
+Consumer reads 9                        9		false
+
+Consumer tries to read.
+Buffer empty. Consumer waits.           9		false
+
+Producer writes 10                      10		true
+
+Consumer reads 10                       10		false
+
+Producer done producing
+Terminating Producer
+
+Consumer read values totaling 55
+Terminating Consumer

@@ -1,0 +1,26 @@
+Demonstração TCP do buffer seguro em loopback
+Início da execução: 2026-11-22 23:03:34 UTC
+Java: openjdk version "25.0.4.1" 2026-08-18 LTS
+Saídas agrupadas por processo. Os PIDs foram registrados pelo sistema operacional.
+
+java MessageBufferServer 12345 | PID=6492 | saída=0
+SERVIDOR porta=12345 capacidade=2
+CONSUMIU A-1
+CONSUMIU A-2
+CONSUMIU A-3
+CONSUMIU B-1
+CONSUMIU B-2
+CONSUMIU B-3
+RESULTADO: SUCESSO | recebidas=6 | unicas=6 | restantes=0
+
+java MessageBufferClient A 12345 | PID=9896 | saída=0
+ENVIOU A-1
+ENVIOU A-2
+ENVIOU A-3
+CLIENTE A recebeu OK 3
+
+java MessageBufferClient B 12345 | PID=5248 | saída=0
+ENVIOU B-1
+ENVIOU B-2
+ENVIOU B-3
+CLIENTE B recebeu OK 3
