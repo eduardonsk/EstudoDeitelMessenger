@@ -1,6 +1,6 @@
 # Concorrência em Java e comunicação entre processos
 
-O [relatório do grupo](relatorio.pdf) analisa as cinco classes fornecidas e apresenta as execuções da atividade. Os comandos abaixo partem da pasta `sistemas-operacionais-deitel`. Use um JDK com `javac` e `java` disponíveis no terminal.
+O [relatório do grupo](relatorio.pdf) analisa as cinco classes fornecidas e apresenta as execuções da atividade. Para rodar os testes com um único comando, siga as [instruções da raiz do projeto](../README.md#como-executar). Para executar cada exemplo à mão, os comandos abaixo partem da pasta `sistemas-operacionais-deitel`. Use um JDK com `javac` e `java` disponíveis no terminal.
 
 ## 1. Reproduzir a condição de disputa
 

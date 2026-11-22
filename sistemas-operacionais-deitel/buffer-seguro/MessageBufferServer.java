@@ -17,62 +17,61 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/** Demonstração de dois clientes TCP alimentando o mesmo monitor no servidor. */
 public class MessageBufferServer {
-    private static final int CLIENT_COUNT = 2;
+    private static final int CLIENTS = 2;
     private static final int MESSAGES_PER_CLIENT = 3;
     private static final int CAPACITY = 2;
 
     public static void main(String[] args) throws Exception {
         int port = args.length == 0 ? 12345 : Integer.parseInt(args[0]);
         MessageBuffer buffer = new MessageBuffer(CAPACITY);
-        try (ServerSocket server = new ServerSocket(port, CLIENT_COUNT, InetAddress.getLoopbackAddress())) {
+        ExecutorService workers = Executors.newFixedThreadPool(CLIENTS + 1);
+        try (ServerSocket server = new ServerSocket(port, CLIENTS, InetAddress.getLoopbackAddress())) {
             server.setSoTimeout(120_000);
             System.out.printf("SERVIDOR porta=%d capacidade=%d%n", server.getLocalPort(), CAPACITY);
-            ExecutorService workers = Executors.newFixedThreadPool(CLIENT_COUNT + 1);
-            try {
-                Future<List<String>> consumer = workers.submit(() -> consume(buffer));
-                List<Future<Void>> producers = new ArrayList<>();
-                for (int i = 0; i < CLIENT_COUNT; i++) {
-                    Socket client = server.accept();
-                    producers.add(workers.submit(() -> {
-                        receive(client, buffer);
-                        return null;
-                    }));
-                }
-                for (Future<Void> producer : producers) {
-                    producer.get();
-                }
-                verify(consumer.get(), buffer.size());
-            } finally {
-                workers.shutdownNow();
+            Future<List<String>> consumer = workers.submit(() -> consume(buffer));
+            List<Future<?>> connections = new ArrayList<>();
+            for (int i = 0; i < CLIENTS; i++) {
+                Socket client = server.accept();
+                connections.add(workers.submit(() -> {
+                    receive(client, buffer);
+                    return null;
+                }));
             }
+            for (Future<?> connection : connections) {
+                connection.get();
+            }
+            verify(consumer.get(), buffer.size());
+        } finally {
+            workers.shutdownNow();
         }
     }
 
     private static void receive(Socket client, MessageBuffer buffer) throws IOException, InterruptedException {
-        try (Socket connection = client;
-             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8))) {
-            connection.setSoTimeout(30_000);
-            for (int n = 0; n < MESSAGES_PER_CLIENT; n++) {
-                String message = in.readLine();
+        try (Socket socket = client) {
+            socket.setSoTimeout(30_000);
+            BufferedReader input = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            for (int i = 0; i < MESSAGES_PER_CLIENT; i++) {
+                String message = input.readLine();
                 if (message == null) {
                     throw new EOFException("Cliente encerrou antes de enviar três mensagens");
                 }
                 buffer.put(message);
             }
-            if (in.readLine() != null) {
+            if (input.readLine() != null) {
                 throw new IOException("Cliente enviou mais de três mensagens");
             }
-            out.write("OK 3\n");
-            out.flush();
+            BufferedWriter output = new BufferedWriter(
+                    new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+            output.write("OK 3\n");
+            output.flush();
         }
     }
 
     private static List<String> consume(MessageBuffer buffer) throws InterruptedException {
         List<String> received = new ArrayList<>();
-        for (int n = 0; n < CLIENT_COUNT * MESSAGES_PER_CLIENT; n++) {
+        for (int i = 0; i < CLIENTS * MESSAGES_PER_CLIENT; i++) {
             String message = buffer.take();
             received.add(message);
             System.out.println("CONSUMIU " + message);
