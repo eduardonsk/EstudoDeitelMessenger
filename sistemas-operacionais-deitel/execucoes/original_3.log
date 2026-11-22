@@ -1,0 +1,12 @@
+Producer writes 1
+Producer writes 2
+Consumer reads 2
+Producer writes 3
+Producer writes 4
+Producer done producing.
+Terminating Producer.
+Consumer reads 4
+Consumer reads 4
+Consumer reads 4
+Consumer read values totaling: 14.
+Terminating Consumer.
